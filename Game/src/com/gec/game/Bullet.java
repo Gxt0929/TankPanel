@@ -15,6 +15,7 @@ public class Bullet extends AbstractGameObject{
     private final int speed=2;
     //子弹发射方向 与坦克方向一致
     DirectionEnum direction;
+
     //有参构造
     public Bullet(String imgUrl, int x, int y,DirectionEnum direction, TankPanel tankPanel) {
         super(imgUrl, x, y, tankPanel);
@@ -48,15 +49,13 @@ public class Bullet extends AbstractGameObject{
 
     //我方子弹击中敌方 坦克
     public void hitEnemyBot(){
-        //我方子弹矩形类
-        Rectangle bulletr=this.getRec();
         //获取敌方坦克集合
         List<EnemyBot> enemyBotList = this.tankPanel.enemyBotList;
         //遍历集合判断敌方坦克与我方子弹是否相交
         for (EnemyBot enemyBot : enemyBotList) {
             if(this.getRec().intersects(enemyBot.getRec())){
                 for(int i=0;i<7;i++) {
-                    Boom boom=new Boom("D:\\桌面\\JAVA\\Game\\image\\boom\\"+(i+1)+".gif", x-34, y-14, this.tankPanel);
+                    Boom boom=new Boom("image/boom/"+(i+1)+".gif", x-34, y-14, this.tankPanel);
                     this.tankPanel.boomlist.add(boom);
                 }
                 Music.boomPlay();
@@ -115,14 +114,23 @@ public class Bullet extends AbstractGameObject{
             if(base.getRec().intersects(next)) {
                 //绘制爆炸效果
                 for(int i=0;i<7;i++) {
-                    Boom boom=new Boom("D:\\桌面\\JAVA\\Game\\image\\boom\\"+(i+1)+".gif", x-46, y-14, this.tankPanel);
-                    this.tankPanel.boomlist.add(boom);
+                Boom boom=new Boom("image/boom/"+(i+1)+".gif", x-34, y-14, this.tankPanel);
+                this.tankPanel.boomlist.add(boom);
+
                 }
                 Music.boomPlay();
                 this.tankPanel.baseList.remove(base);//删除基地
                 this.tankPanel.bulletsRemoveList.add(this);//删除子弹
-                //2秒后设置游戏状态为 失败
-                tankPanel.state=3;
+
+                //0.5秒后设置游戏状态为 失败
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    tankPanel.state=3;
+                }).start();
                 break;
             }
         }

@@ -24,9 +24,7 @@ public class Tank extends AbstractGameObject{
     private final int speed=1;
 
     //是否可以发射子弹
-    private boolean attackCooling=true;
-    //子弹发射间隔1000ms
-    private final int attackIntervalTime=1000;
+    boolean attackCooling=true;
 
     //有参构造 玩家和
     public Tank(String imgUrl, int x, int y, TankPanel tankPanel,
@@ -142,10 +140,12 @@ public class Tank extends AbstractGameObject{
     //射击方法
     public void attack() {
         Point p=getHeadPoint();
-        Bullet bullet=new Bullet("D:\\桌面\\JAVA\\Game\\image\\bullet\\bulletGreen.gif",p.x-10,p.y-10, direction, this.tankPanel);
-        this.tankPanel.bulletList.add(bullet);//将子弹添加至子弹集合
+        Bullet bullet=new Bullet("image/bullet/bulletGreen.gif",p.x-10,p.y-10, direction, this.tankPanel);
         //启动线程 设置1秒攻击间隔
         new Thread(new AttackCD()).start();
+        if(attackCooling){
+            this.tankPanel.bulletList.add(bullet);//将子弹添加至子弹集合
+        }
     }
     //攻击间隔线程
     class AttackCD implements Runnable {
@@ -154,6 +154,8 @@ public class Tank extends AbstractGameObject{
             //设置坦克不可射击
             attackCooling = false;
             try {//线程休眠1秒
+                //子弹发射间隔500ms
+                int attackIntervalTime = 500;
                 Thread.sleep(attackIntervalTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();

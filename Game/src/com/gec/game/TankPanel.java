@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -20,7 +19,7 @@ public class TankPanel extends JPanel implements KeyListener {
     final static int x = 1200;
     final static int y = 800;
 //    设置游戏状态
-int state = 0;
+    int state = 0;
 //    临时变量
     private int a = 1;
 //     0 未开始，1 开始，2 暂停，3 失败，4 胜利 6双人模式
@@ -48,6 +47,8 @@ int state = 0;
     public List<Base> baseList = new ArrayList<>();
     public List<Grass> grassList = new ArrayList<>();
     public List<FeWall> feWallList = new ArrayList<>();
+    //控制是否重绘
+    private boolean run = true;
 
 //    子弹方向
     private boolean left = false;
@@ -59,7 +60,6 @@ int state = 0;
     public int repaintCount=0;
 //     敌方坦克人机数量
     private int enemyRobotCount=0;
-    Iterator var2;
     private final int wallCount = 100;
     private final int[] xrr;
     private final int[] yrr;
@@ -68,11 +68,8 @@ int state = 0;
         this.yrr = new int[this.wallCount];
     }
 
-
-
     @Override
     public void paint(Graphics g){
-
         //绘制实心矩形 填充整个画布
         g.fillRect(0, 0, 1200, 800);
         switch (state) {
@@ -84,7 +81,6 @@ int state = 0;
                 g.setFont(new Font("宋体",Font.BOLD,66));
                 g.setColor(Color.PINK);
 //                g.drawString("单人模式",400,400);
-                gamerOne.paintSelf(g);
                 //绘制我方坦克
                 for (Tank tank : gamerList) {
                     tank.paintSelf(g);
@@ -97,9 +93,6 @@ int state = 0;
                 for (EnemyBot enemyBot : enemyBotList) {
                     enemyBot.paintSelf(g);
                 }
-                //删除已经击中敌方坦克的我方子弹
-                bulletList.removeAll(bulletsRemoveList);
-
                 for (Wall wall : wallList) {
                     wall.paintSelf(g);
                 }
@@ -115,6 +108,8 @@ int state = 0;
                 for (Boom boom : boomlist) {
                     boom.paintSelf(g);
                 }
+                //删除已经击中敌方坦克的我方子弹
+                bulletList.removeAll(bulletsRemoveList);
                 //移除后清空
                 bulletsRemoveList.clear();
             }
@@ -129,41 +124,56 @@ int state = 0;
                 g.drawImage(Toolkit.getDefaultToolkit().getImage("image/fail.png"), 300,200,this);
             }
             case 4 -> g.drawImage(Toolkit.getDefaultToolkit().getImage("image/success.jpg"),0,0,this);
-            case 5 -> System.out.println("选择游戏模式");
+            case 5 -> {
+                //设置 不能重绘
+                if(true){
+                    run = false;
+                }
+                //最后一次绘制关卡内容
+                for (Tank tank : gamerList) {
+                    tank.paintSelf(g);
+                }
+                for (Bullet bullet : bulletList) {
+                    bullet.paintSelf(g);
+                }
+                //重绘敌方坦克
+                for (EnemyBot enemyBot : enemyBotList) {
+                    enemyBot.paintSelf(g);
+                }
+                //删除坦克子弹
+                bulletList.removeAll(bulletsRemoveList);
+                //移除后清空
+                bulletsRemoveList.clear();
+                for (Wall wall : wallList) {
+                    wall.paintSelf(g);
+                }
+                //绘制基地
+                for (Base base1 : baseList) {
+                    base1.paintSelf(g);
+                }
+                //绘制铁墙
+                for (FeWall feWall : feWallList) {
+                    feWall.paintSelf(g);
+                }
+                //绘制草地
+                for (Grass grass : grassList) {
+                    grass.paintSelf(g);
+                }
+                //绘制爆炸效果
+                for (Boom boom : boomlist) {
+                    boom.paintSelf(g);
+                }
+                //绘制 游戏暂停在屏幕中间
+                g.setColor(Color.WHITE);//设置画笔颜色
+                g.setFont(new Font("黑体", Font.BOLD, 100));//设置字体
+                g.drawString("游戏暂停", 450, 500);
+            }
             default -> System.out.println("状态码无效！");
-
         }
-        repaint();
-    }
-    //更新、渲染场景
-    public void run (){
-        // 初始化敌方坦克
-        initEnemyBots();
-        while (true) {
-            //每绘制100次并且 敌方坦克小于10
-            if (repaintCount % 100 == 1 && enemyRobotCount < 10) {
-                addEnemyBot();
-            }
-            if(!boomlist.isEmpty()) {//爆炸集合不为空，则删除集合中第一个元素
-                boomlist.remove(0);
-            }
+        if(run){
             repaint();
-            repaintCount++;//重绘次数+1
-            try {
-                Thread.sleep(10);//刷新休眠时间
-            } catch (Exception e) {
-                e.printStackTrace();
-                // TODO: handle exception
-            }
-            if(enemyBotList.isEmpty() &&enemyRobotCount==2){
-                //敌方坦克消灭并生成过10个坦克
-                state=4;//状态为胜利
-            }
-//            if(gamerList.isEmpty() &&(state== 1 || state == 6)){
-//                //游戏失败
-//                state=3;
-//            }
         }
+
     }
 
     //生成建筑: 围墙、铁墙、草地、基地
@@ -230,13 +240,29 @@ int state = 0;
         if(key == 87 || key == 119) {
             a = 1;
             y1 = 475;
-
         } else if (key == 83 || key == 115) {
             a = 2;
             y1 = 570;
         } else if (key == KeyEvent.VK_ENTER){
             state = a;
+            if(state == 1)
+            {
+                //添加一辆己方坦克
+                gamerList.add(gamerOne);
+            }
             Music.startPlay();
+        } else if(key == 'P' || key == 'p') {
+            if(state!=5) { //未暂停状态
+                a=state;  //将原状态赋值给 临时变量a
+                state=5;  //设置为暂停
+            }else {
+                state=a; //设置原状态
+                run=true; //重绘 继续游戏
+                if(a==0){ //state 之前值为0
+                    a=1;//该临时变量a值为默认1
+                }
+        }
+
         }
         System.out.println(e.getKeyChar());
         switch (key) {
@@ -254,6 +280,45 @@ int state = 0;
     @Override
     public void keyReleased(KeyEvent e) {
         gamerOne.keyReleased(e);
+    }
+
+    //更新、渲染场景
+    public void run (){
+        // 初始化敌方坦克
+        initEnemyBots();
+        while (true) {
+            //每绘制100次并且 敌方坦克小于10
+            if (repaintCount % 100 == 1 && enemyRobotCount < 10) {
+                addEnemyBot();
+            }
+            if(!boomlist.isEmpty()) {//爆炸集合不为空，则删除集合中第一个元素
+                boomlist.remove(0);
+            }
+            if (run) { //未暂停 执行重绘  <-----------------------
+                repaint();
+                repaintCount++;//重绘次数+1
+            }
+            try {
+                Thread.sleep(10);//刷新休眠时间
+            } catch (Exception e) {
+                e.printStackTrace();
+                // TODO: handle exception
+            }
+            if(enemyBotList.isEmpty() &&enemyRobotCount==10){
+                //敌方坦克消灭并生成过10个坦克
+                state=4;//状态为胜利
+            }
+            if(gamerList.isEmpty() &&(state== 1 || state == 6)){
+                //0.5秒后设置游戏状态为 失败
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                state=3;
+                break;
+            }
+        }
     }
     //随机生成坐标方法
     public void random() {

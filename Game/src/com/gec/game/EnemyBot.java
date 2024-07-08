@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class EnemyBot extends Tank {
 
+
     public EnemyBot(String imgUrl, int x, int y, TankPanel tankPanel, String upPic, String downPic, String rightPic, String leftPic) {
 
         super(imgUrl, x, y, tankPanel, upPic, downPic, rightPic, leftPic);
@@ -56,11 +57,12 @@ public class EnemyBot extends Tank {
     //射击方法
     public void attack() {
         Point p = getHeadPoint();
-        EnemyBullet enemyBullet = new EnemyBullet("D:\\桌面\\JAVA\\Game\\image\\bullet\\bulletYellow.gif", p.x - 10, p.y - 10, direction, this.tankPanel);
+        EnemyBullet enemyBullet = new EnemyBullet("image/bullet/bulletYellow.gif", p.x - 10, p.y - 10, direction, this.tankPanel);
         Random random = new Random();
         int i = random.nextInt(400);
-        if (i < 5) {
+        if (i < 1) {
             this.tankPanel.bulletList.add(enemyBullet);//将子弹添加至子弹集合
         }
     }
 }
+

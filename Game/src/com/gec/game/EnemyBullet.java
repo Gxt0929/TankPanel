@@ -20,7 +20,7 @@ public class EnemyBullet extends Bullet{
         for (Tank tank : gamerList) {
             if(tank.getRec().intersects(bulletr)){
                 for(int i=0;i<7;i++) {
-                    Boom boom=new Boom("D:\\桌面\\JAVA\\Game\\image\\boom\\"+(i+1)+".gif", x-34, y-14, this.tankPanel);
+                    Boom boom = new Boom("image/boom/"+(i+1)+".gif", x - 34, y - 14, this.tankPanel);
                     this.tankPanel.boomlist.add(boom);
                 }
                 Music.boomPlay();
@@ -29,23 +29,6 @@ public class EnemyBullet extends Bullet{
                 //将该子弹添加到 待移除集合中
                 this.tankPanel.bulletsRemoveList.add(this);
                 break; //结束当前循环
-            }
-        }
-    }
-    //子弹击中围墙
-    public void hitWall() {
-        //获取当前子弹坐标对象
-        Rectangle next=this.getRec();
-        //获取所有围墙对象集合
-        List<Wall>walls=this.tankPanel.wallList;
-        //循环围墙检测是否与当前子弹发生碰撞
-        for(Wall w:walls) {
-            if(w.getRec().intersects(next)) {
-                //发生碰撞 将围墙移除
-                this.tankPanel.wallList.remove(w);
-                //将子弹放入待移除子弹集合中
-                this.tankPanel.bulletsRemoveList.add(this);
-                break;//子弹击中该围墙后消失 可以停止循环比较
             }
         }
     }

@@ -16,11 +16,11 @@ public class Music{
     private static Clip wall;  //击中墙体音效
     static {
         //获取文件对象 使用绝对路径
-        File bgMusicStartFile = new File("D:\\桌面\\JAVA\\Game\\music\\bgm.wav");
-        File bgMusicAttackFile = new File("D:\\桌面\\JAVA\\Game\\music\\attack.wav");
-        File bgMusicMoveFile = new File("D:\\桌面\\JAVA\\Game\\music\\move.wav");
-        File bgMusicExplodeFile = new File("D:\\桌面\\JAVA\\Game\\music\\boom.wav");
-        File bgMusicWallFile = new File("D:\\桌面\\JAVA\\Game\\music\\wall.wav");
+        File bgMusicStartFile = new File("music/bgm.wav");
+        File bgMusicAttackFile = new File("music/attack.wav");
+        File bgMusicMoveFile = new File("music/move.wav");
+        File bgMusicExplodeFile = new File("music/boom.wav");
+        File bgMusicWallFile = new File("music/wall.wav");
         try {
             //获取音乐文件输入流
             AudioInputStream audioInputStreamStart = AudioSystem.getAudioInputStream(bgMusicStartFile);
