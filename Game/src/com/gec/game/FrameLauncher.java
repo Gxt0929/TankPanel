@@ -17,7 +17,7 @@ public class FrameLauncher extends JFrame{
 //        窗口居中
         setLocationRelativeTo(null);
 //        关闭事件
-        setDefaultCloseOperation(2);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 //        设置窗口不能调整
         setResizable(false);
 //        窗口可见

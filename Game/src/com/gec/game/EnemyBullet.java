@@ -1,7 +1,5 @@
 package com.gec.game;
 
-import com.gec.game.bulid.Wall;
-
 import java.awt.*;
 import java.util.List;
 
@@ -10,7 +8,7 @@ public class EnemyBullet extends Bullet{
     public EnemyBullet(String imgUrl, int x, int y, DirectionEnum direction, TankPanel tankPanel) {
         super(imgUrl, x, y, direction, tankPanel);
     }
-    //我方子弹击中敌方 坦克
+
     public void hitGamer(){
         //敌方子弹矩形类
         Rectangle bulletr=this.getRec();
@@ -28,6 +26,15 @@ public class EnemyBullet extends Bullet{
                 this.tankPanel.gamerList.remove(tank);
                 //将该子弹添加到 待移除集合中
                 this.tankPanel.bulletsRemoveList.add(this);
+                //0.5秒后设置游戏状态为 失败
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    tankPanel.state=3;
+                }).start();
                 break; //结束当前循环
             }
         }

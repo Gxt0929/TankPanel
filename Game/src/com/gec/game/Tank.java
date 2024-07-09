@@ -65,37 +65,34 @@ public class Tank extends AbstractGameObject{
         //循环墙体
         for (Wall wall : wallList) {
             if(wall.getRec().intersects(next)){
-                return true;// 相交
+                return false;// 相交
             }
         }
         //进行铁墙碰撞检测
         for (FeWall feWall : feWalls) {
             if(feWall.getRec().intersects(next)){
-                return true;// 相交
+                return false;// 相交
             }
         }
-        return false;//不想交
+        return true;//不想交
     }
 
     //坦克与边界碰撞
     public boolean tankHitBorder(int x,int y) {
         if(x<0) {
             //地图左边界检测
-            return true;
+            return false;
         }else if(x>this.tankPanel.getWidth()-width) {
             //地图右边界检测
-            return true;
-        }else if(y<0) {
+            return false;
+        }else //地图下边界检测
+            if(y<0) {
             //地图上边界检测
-            return true;
-        }else if(y>this.tankPanel.getHeight()-height) {
-            //地图下边界检测
-            return true;
-        }
-        return false;
+            return false;
+        }else return y <= this.tankPanel.getHeight() - height;
     }
     public void leftWard() {
-        if(!tankHitWall(x -speed,y)&&!tankHitBorder(x-speed,y)){
+        if(tankHitWall(x - speed, y) && tankHitBorder(x - speed, y)){
             x -= speed;
             direction= DirectionEnum.LEFT;
             setImg(leftPic);
@@ -103,21 +100,21 @@ public class Tank extends AbstractGameObject{
     }
 
     public void rightWard() {
-        if(!tankHitWall(x +speed,y)&&!tankHitBorder(x+speed,y)) {
+        if(tankHitWall(x + speed, y) && tankHitBorder(x + speed, y)) {
             x += speed;
             direction = DirectionEnum.RIGHT;
             setImg(rightPic);
         }
     }
     public void upWard() {
-        if(!tankHitWall(x,y-speed)&&!tankHitBorder(x,y-speed)) {
+        if(tankHitWall(x, y - speed) && tankHitBorder(x, y - speed)) {
             y -= speed;
             direction = DirectionEnum.UP;
             setImg(upPic);
         }
     }
     public void downWard() {
-        if(!tankHitWall(x,y+speed)&&!tankHitBorder(x,y+speed)) {
+        if(tankHitWall(x, y + speed) && tankHitBorder(x, y + speed)) {
             y += speed;
             direction = DirectionEnum.DOWN;
             setImg(downPic);
@@ -128,41 +125,46 @@ public class Tank extends AbstractGameObject{
         this.image=Toolkit.getDefaultToolkit().getImage(img);
     }
     //根据方向确定头部位置,x和y是左上角的点
-    public Point getHeadPoint() {
-        return switch (direction) {
-            case UP -> new Point(x + width / 2, y);
-            case LEFT -> new Point(x, y + height / 2);
-            case DOWN -> new Point(x + width / 2, y + height);
-            case RIGHT -> new Point(x + width, y + height / 2);
-            default -> null;
-        };
+    public Point getHeadPoint(){
+        switch (direction){
+            case UP:
+                return new Point(x+width/2,y);
+            case LEFT:
+                return new Point(x,y+height/2);
+            case DOWN:
+                return new Point(x+width/2,y+height);
+            case RIGHT:
+                return new Point(x+width,y+height/2);
+            default:
+                return null;
+        }
     }
     //射击方法
     public void attack() {
         Point p=getHeadPoint();
         Bullet bullet=new Bullet("image/bullet/bulletGreen.gif",p.x-10,p.y-10, direction, this.tankPanel);
         //启动线程 设置1秒攻击间隔
-        new Thread(new AttackCD()).start();
+//        new Thread(new AttackCD()).start();
         if(attackCooling){
             this.tankPanel.bulletList.add(bullet);//将子弹添加至子弹集合
         }
     }
-    //攻击间隔线程
-    class AttackCD implements Runnable {
-        @Override
-        public void run() {
-            //设置坦克不可射击
-            attackCooling = false;
-            try {//线程休眠1秒
-                //子弹发射间隔500ms
-                int attackIntervalTime = 500;
-                Thread.sleep(attackIntervalTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            //休眠结束 设置坦克可以射击
-            attackCooling = true;
-        }
-    }
+//    //攻击间隔线程
+//    class AttackCD implements Runnable {
+//        @Override
+//        public void run() {
+//            //设置坦克不可射击
+//            attackCooling = false;
+//            try {//线程休眠1秒
+//                //子弹发射间隔500ms
+//                int attackIntervalTime = 500;
+//                Thread.sleep(attackIntervalTime);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            //休眠结束 设置坦克可以射击
+//            attackCooling = true;
+//        }
+//    }
 
 }

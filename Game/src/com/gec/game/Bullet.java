@@ -8,11 +8,8 @@ import java.awt.*;
 import java.util.List;
 
 public class Bullet extends AbstractGameObject{
-    //长宽
-    private final int width=10;
-    private final int height=10;
     //速度会比坦克快一些
-    private final int speed=2;
+    private final int speed=1;
     //子弹发射方向 与坦克方向一致
     DirectionEnum direction;
 
@@ -25,10 +22,18 @@ public class Bullet extends AbstractGameObject{
     //调用该方法通过方向移动子弹
     public void go() {
         switch (direction) {
-            case UP -> upWard();
-            case DOWN -> downWard();
-            case LEFT -> leftWard();
-            case RIGHT -> rightWard();
+            case UP:
+                upWard();
+                break;
+            case DOWN:
+                downWard();
+                break;
+            case LEFT:
+                leftWard();
+                break;
+            case RIGHT:
+                rightWard();
+                break;
         }
     }
 
@@ -81,6 +86,7 @@ public class Bullet extends AbstractGameObject{
                 //将子弹放入待移除子弹集合中
                 this.tankPanel.bulletsRemoveList.add(this);
                 break;//子弹击中该围墙后消失 可以停止循环比较
+
             }
         }
     }
@@ -148,7 +154,10 @@ public class Bullet extends AbstractGameObject{
     }
     @Override
     public Rectangle getRec() {
-        return new Rectangle(x,y,width,height);
+        //长宽
+        int width = 10;
+        int height = 10;
+        return new Rectangle(x,y, width, height);
     }
 
 }

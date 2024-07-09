@@ -68,11 +68,6 @@ public class Music{
         boom.start();
         boom.setFramePosition(0);
     }
-    //播放子弹击中墙体音效
-    public static void wallPlay() {
-        wall.start();
-        wall.setFramePosition(0);
-    }
 
     public static void main(String[] args) {
         Music.movePlay();//测试

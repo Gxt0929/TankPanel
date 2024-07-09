@@ -16,28 +16,28 @@ public class GamerOne extends Tank {
     public void keyPressed(KeyEvent e) {
         int key=e.getKeyCode();
         switch (key) {
-            case KeyEvent.VK_A -> {
+            case KeyEvent.VK_A:
                 left = true;
                 Music.movePlay();
-            }
-            case KeyEvent.VK_D -> {
+                break;
+            case KeyEvent.VK_D:
                 right = true;
                 Music.movePlay();
-            }
-            case KeyEvent.VK_W -> {
+                break;
+            case KeyEvent.VK_W:
                 up = true;
                 Music.movePlay();
-            }
-            case KeyEvent.VK_S -> {
+                break;
+            case KeyEvent.VK_S:
                 down = true;
                 Music.movePlay();
-            }
-            case KeyEvent.VK_SPACE -> {
+                break;
+            case KeyEvent.VK_SPACE:
                 Music.attackPlay();
                 this.attack();
-            }
-            default -> {
-            }
+                break;
+            default:
+                break;
         }
     }
     /*
@@ -46,24 +46,24 @@ public class GamerOne extends Tank {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         switch (key) {
-            case KeyEvent.VK_A -> {
+            case KeyEvent.VK_A:
                 left = false;
                 Music.moveStop();
-            }
-            case KeyEvent.VK_S -> {
+                break;
+            case KeyEvent.VK_S:
                 down = false;
                 Music.moveStop();
-            }
-            case KeyEvent.VK_D -> {
+                break;
+            case KeyEvent.VK_D:
                 right = false;
                 Music.moveStop();
-            }
-            case KeyEvent.VK_W -> {
+                break;
+            case KeyEvent.VK_W:
                 up = false;
                 Music.moveStop();
-            }
-            default -> {
-            }
+                break;
+            default:
+                break;
         }
     }
 

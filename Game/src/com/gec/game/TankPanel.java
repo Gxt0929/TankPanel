@@ -17,7 +17,6 @@ public class TankPanel extends JPanel implements KeyListener {
 
 //    设置窗口大小
     final static int x = 1200;
-    final static int y = 800;
 //    设置游戏状态
     int state = 0;
 //    临时变量
@@ -32,7 +31,7 @@ public class TankPanel extends JPanel implements KeyListener {
             "image/player1/p1tankD.gif",
             "image/player1/p1tankR.gif",
             "image/player1/p1tankL.gif");
-    //    子弹集合
+//    子弹集合
     public List<Bullet> bulletList=new ArrayList<>();
 //    子弹 待删除集合
     public List<Bullet> bulletsRemoveList = new ArrayList<>();
@@ -51,12 +50,8 @@ public class TankPanel extends JPanel implements KeyListener {
     private boolean run = true;
 
 //    子弹方向
-    private boolean left = false;
-    private boolean up = false;
-    private boolean down = false;
-    private boolean right = false;
 
-//     重绘次数
+    //     重绘次数
     public int repaintCount=0;
 //     敌方坦克人机数量
     private int enemyRobotCount=0;
@@ -126,9 +121,7 @@ public class TankPanel extends JPanel implements KeyListener {
             case 4 -> g.drawImage(Toolkit.getDefaultToolkit().getImage("image/success.jpg"),0,0,this);
             case 5 -> {
                 //设置 不能重绘
-                if(true){
-                    run = false;
-                }
+                run = false;
                 //最后一次绘制关卡内容
                 for (Tank tank : gamerList) {
                     tank.paintSelf(g);
@@ -207,7 +200,7 @@ public class TankPanel extends JPanel implements KeyListener {
     }
 
     private void initEnemyBots() { // 添加初始敌方坦克
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             addEnemyBot();
         }
     }
@@ -215,7 +208,7 @@ public class TankPanel extends JPanel implements KeyListener {
     private void addEnemyBot() {
         Random r = new Random();
         int x = r.nextInt(TankPanel.x - 50);
-        int y = r.nextInt(300); // 限制在一定范围内生成
+        int y = r.nextInt(10); // 限制在一定范围内生成
         EnemyBot enemyBot = new EnemyBot("image/enemy/enemy1D.gif", x, y, this,
                 "image/enemy/enemy1U.gif", "image/enemy/enemy1D.gif",
                 "image/enemy/enemy1R.gif", "image/enemy/enemy1L.gif");
@@ -266,14 +259,9 @@ public class TankPanel extends JPanel implements KeyListener {
         }
         System.out.println(e.getKeyChar());
         switch (key) {
-            case KeyEvent.VK_A -> left = true;
-            case KeyEvent.VK_D -> right = true;
-            case KeyEvent.VK_W -> up = true;
-            case KeyEvent.VK_S -> down = true;
-            case KeyEvent.VK_SPACE ->// 按下空格
-                    gamerOne.attack(); //调用发射方法
-            default -> {
-            }
+            case KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S:
+            default:
+                break;
         }
     }
     ////键盘抬起事件
@@ -299,7 +287,7 @@ public class TankPanel extends JPanel implements KeyListener {
                 repaintCount++;//重绘次数+1
             }
             try {
-                Thread.sleep(10);//刷新休眠时间
+                Thread.sleep(15);//刷新休眠时间
             } catch (Exception e) {
                 e.printStackTrace();
                 // TODO: handle exception
@@ -307,16 +295,7 @@ public class TankPanel extends JPanel implements KeyListener {
             if(enemyBotList.isEmpty() &&enemyRobotCount==10){
                 //敌方坦克消灭并生成过10个坦克
                 state=4;//状态为胜利
-            }
-            if(gamerList.isEmpty() &&(state== 1 || state == 6)){
-                //0.5秒后设置游戏状态为 失败
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                state=3;
-                break;
+
             }
         }
     }
@@ -340,10 +319,8 @@ public class TankPanel extends JPanel implements KeyListener {
                     xrr[i] = x * 60;
                     yrr[i] = y * 60;
                     i++;
-                } else {
-                    //重复则跳过当前循环 再次生成随机
-                    continue;
-                }
+                }  //重复则跳过当前循环 再次生成随机
+
             } else {
                 //第一次生成坐标
                 xrr[i] = x * 60;

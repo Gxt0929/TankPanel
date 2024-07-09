@@ -20,13 +20,18 @@ public class EnemyBot extends Tank {
     public DirectionEnum randomEnemyTankDirection() {
         Random r = new Random();
         int rnum = r.nextInt(4);//生成0 1 2 3 随机数
-        return switch (rnum) {
-            case 0 -> DirectionEnum.UP;
-            case 1 -> DirectionEnum.RIGHT;
-            case 2 -> DirectionEnum.LEFT;
-            default -> DirectionEnum.DOWN;
-        };
+        switch (rnum) {
+            case 0:
+                return DirectionEnum.UP;
+            case 1:
+                return DirectionEnum.RIGHT;
+            case 2:
+                return DirectionEnum.LEFT;
+            default:
+                return DirectionEnum.DOWN;
+        }
     }
+
 
     //人机移动次数
     int moveTime = 0;
@@ -47,14 +52,23 @@ public class EnemyBot extends Tank {
             ++moveTime;
         }
         switch (direction) {
-            case UP -> upWard();
-            case DOWN -> downWard();
-            case RIGHT -> rightWard();
-            case LEFT -> leftWard();
+            case UP:
+                upWard();
+                break;
+            case DOWN:
+                downWard();
+                break;
+            case RIGHT:
+                rightWard();
+                break;
+            case LEFT:
+                leftWard();
+                break;
         }
     }
 
     //射击方法
+    @Override
     public void attack() {
         Point p = getHeadPoint();
         EnemyBullet enemyBullet = new EnemyBullet("image/bullet/bulletYellow.gif", p.x - 10, p.y - 10, direction, this.tankPanel);
