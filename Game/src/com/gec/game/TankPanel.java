@@ -69,31 +69,33 @@ public class TankPanel extends JPanel implements KeyListener {
         //绘制实心矩形 填充整个画布
         g.fillRect(0, 0, 1200, 800);
         switch (state) {
-            case 0 -> {
+            case 0:
                 g.drawImage(Toolkit.getDefaultToolkit().getImage("image/interface.png"), 0, 0, this);
-                g.drawImage(choose,300,y1,this);
-                g.drawImage(choose,850,y1,this);
-            }
-            case 1 -> {
-                g.setFont(new Font("宋体",Font.BOLD,66));
-                g.setColor(Color.PINK);
+                g.drawImage(choose, 300, y1, this);
+                g.drawImage(choose, 850, y1, this);
+                break;
 //                g.drawString("单人模式",400,400);
-                //绘制我方坦克
+//绘制我方坦克
+//绘制子弹
+//绘制敌方坦克
+//删除已经击中敌方坦克的我方子弹
+//移除后清空
+            case 1:
+                g.setFont(new Font("宋体", Font.BOLD, 66));
+                g.setColor(Color.PINK);
                 for (Tank tank : gamerList) {
                     tank.paintSelf(g);
                 }
-                //绘制子弹
-                for(Bullet bullet:bulletList) {
+                for (Bullet bullet : bulletList) {
                     bullet.paintSelf(g);
                 }
-                //绘制敌方坦克
                 for (EnemyBot enemyBot : enemyBotList) {
                     enemyBot.paintSelf(g);
                 }
                 for (Wall wall : wallList) {
                     wall.paintSelf(g);
                 }
-                for (FeWall feWall :feWallList) {
+                for (FeWall feWall : feWallList) {
                     feWall.paintSelf(g);
                 }
                 for (Base base : baseList) {
@@ -105,69 +107,68 @@ public class TankPanel extends JPanel implements KeyListener {
                 for (Boom boom : boomlist) {
                     boom.paintSelf(g);
                 }
-                //删除已经击中敌方坦克的我方子弹
                 bulletList.removeAll(bulletsRemoveList);
-                //移除后清空
                 bulletsRemoveList.clear();
-            }
-
-            case 2 -> {
-                g.setFont(new Font("宋体",Font.BOLD,66));
+                break;
+            case 2:
+                g.setFont(new Font("宋体", Font.BOLD, 66));
                 g.setColor(Color.PINK);
-                g.drawString("双人模式",400,400);
-            }
-            case 3 -> {
+                g.drawString("双人模式", 400, 400);
+                break;
+            case 3:
                 Music.bgmStop();
                 g.fillRect(0, 0, 1200, 800);
-                g.drawImage(Toolkit.getDefaultToolkit().getImage("image/fail.png"), 300,200,this);
-            }
-            case 4 -> {
+                g.drawImage(Toolkit.getDefaultToolkit().getImage("image/fail.png"), 300, 200, this);
+                break;
+            case 4:
                 Music.bgmStop();
-                g.drawImage(Toolkit.getDefaultToolkit().getImage("image/success.jpg"),0,0,this);
-            }
-            case 5 -> {
-                //设置 不能重绘
+                g.drawImage(Toolkit.getDefaultToolkit().getImage("image/success.jpg"), 0, 0, this);
+                break;
+//设置 不能重绘
+//最后一次绘制关卡内容
+//重绘敌方坦克
+//删除坦克子弹
+//移除后清空
+//绘制基地
+//绘制铁墙
+//绘制草地
+//绘制爆炸效果
+//绘制 游戏暂停在屏幕中间
+            case 5:
                 run = false;
-                //最后一次绘制关卡内容
                 for (Tank tank : gamerList) {
                     tank.paintSelf(g);
                 }
                 for (Bullet bullet : bulletList) {
                     bullet.paintSelf(g);
                 }
-                //重绘敌方坦克
                 for (EnemyBot enemyBot : enemyBotList) {
                     enemyBot.paintSelf(g);
                 }
-                //删除坦克子弹
                 bulletList.removeAll(bulletsRemoveList);
-                //移除后清空
                 bulletsRemoveList.clear();
                 for (Wall wall : wallList) {
                     wall.paintSelf(g);
                 }
-                //绘制基地
                 for (Base base1 : baseList) {
                     base1.paintSelf(g);
                 }
-                //绘制铁墙
                 for (FeWall feWall : feWallList) {
                     feWall.paintSelf(g);
                 }
-                //绘制草地
                 for (Grass grass : grassList) {
                     grass.paintSelf(g);
                 }
-                //绘制爆炸效果
                 for (Boom boom : boomlist) {
                     boom.paintSelf(g);
                 }
-                //绘制 游戏暂停在屏幕中间
                 g.setColor(Color.WHITE);//设置画笔颜色
                 g.setFont(new Font("黑体", Font.BOLD, 100));//设置字体
                 g.drawString("游戏暂停", 450, 500);
-            }
-            default -> System.out.println("状态码无效！");
+                break;
+            default:
+                System.out.println("状态码无效！");
+                break;
         }
         if(run){
             repaint();
