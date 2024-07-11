@@ -22,6 +22,8 @@ public class EnemyBullet extends Bullet{
                     this.tankPanel.boomlist.add(boom);
                 }
                 Music.boomPlay();
+                Music.ngmhhyPlay();
+                Music.bgmStop();
                 //敌方子弹击中玩家坦克 移除该坦克
                 this.tankPanel.gamerList.remove(tank);
                 //将该子弹添加到 待移除集合中

@@ -63,7 +63,8 @@ public class Bullet extends AbstractGameObject{
                     Boom boom=new Boom("image/boom/"+(i+1)+".gif", x-34, y-14, this.tankPanel);
                     this.tankPanel.boomlist.add(boom);
                 }
-                Music.boomPlay();
+//                Music.boomPlay();
+                Music.jiPlay();
                 //我方子弹击中敌方坦克 移除该坦克
                 enemyBotList.remove(enemyBot);
                 //将该子弹添加到 待移除集合中
@@ -125,6 +126,8 @@ public class Bullet extends AbstractGameObject{
 
                 }
                 Music.boomPlay();
+                Music.ggPlay();
+                Music.bgmStop();
                 this.tankPanel.baseList.remove(base);//删除基地
                 this.tankPanel.bulletsRemoveList.add(this);//删除子弹
 

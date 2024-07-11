@@ -22,15 +22,16 @@ public class TankPanel extends JPanel implements KeyListener {
 //    临时变量
     private int a = 1;
 //     0 未开始，1 开始，2 暂停，3 失败，4 胜利 6双人模式
-    Image choose = Toolkit.getDefaultToolkit().getImage("image/player1/p1tankR.gif");
+    Image choose = Toolkit.getDefaultToolkit().getImage("image/player1/jian.png");
 //    定义初始y指针
     public int y1 = 475;
 //    创建玩家1对象 填入默认图片、生成坐标、四方向图片
-    GamerOne gamerOne = new GamerOne("image/player1/p1tankU.gif", 500, 700,
-            this,"image/player1/p1tankU.gif",
-            "image/player1/p1tankD.gif",
-            "image/player1/p1tankR.gif",
-            "image/player1/p1tankL.gif");
+    GamerOne gamerOne = new GamerOne("image/player1/jiR.png", 500, 700,
+            this,"image/player1/jiL.png",
+            "image/player1/jiR.png",
+            "image/player1/jiR.png",
+            "image/player1/jiL.png");
+
 //    子弹集合
     public List<Bullet> bulletList=new ArrayList<>();
 //    子弹 待删除集合
@@ -71,6 +72,7 @@ public class TankPanel extends JPanel implements KeyListener {
             case 0 -> {
                 g.drawImage(Toolkit.getDefaultToolkit().getImage("image/interface.png"), 0, 0, this);
                 g.drawImage(choose,300,y1,this);
+                g.drawImage(choose,850,y1,this);
             }
             case 1 -> {
                 g.setFont(new Font("宋体",Font.BOLD,66));
@@ -115,10 +117,14 @@ public class TankPanel extends JPanel implements KeyListener {
                 g.drawString("双人模式",400,400);
             }
             case 3 -> {
+                Music.bgmStop();
                 g.fillRect(0, 0, 1200, 800);
                 g.drawImage(Toolkit.getDefaultToolkit().getImage("image/fail.png"), 300,200,this);
             }
-            case 4 -> g.drawImage(Toolkit.getDefaultToolkit().getImage("image/success.jpg"),0,0,this);
+            case 4 -> {
+                Music.bgmStop();
+                g.drawImage(Toolkit.getDefaultToolkit().getImage("image/success.jpg"),0,0,this);
+            }
             case 5 -> {
                 //设置 不能重绘
                 run = false;
@@ -182,7 +188,7 @@ public class TankPanel extends JPanel implements KeyListener {
         wallList.add(new Wall("image/walls.gif", 610, 660, this));
         wallList.add(new Wall("image/walls.gif", 670, 660, this));
         wallList.add(new Wall("image/walls.gif", 670, 720, this));
-        baseList.add(new Base("image/base.gif", 610, 720, this));
+        baseList.add(new Base("image/base.png", 610, 720, this));
         for(int i=0;i<wallCount;i++) {
             Random a=new Random();
             int num=a.nextInt(4);//随机生成0~3
@@ -209,9 +215,9 @@ public class TankPanel extends JPanel implements KeyListener {
         Random r = new Random();
         int x = r.nextInt(TankPanel.x - 50);
         int y = r.nextInt(10); // 限制在一定范围内生成
-        EnemyBot enemyBot = new EnemyBot("image/enemy/enemy1D.gif", x, y, this,
-                "image/enemy/enemy1U.gif", "image/enemy/enemy1D.gif",
-                "image/enemy/enemy1R.gif", "image/enemy/enemy1L.gif");
+        EnemyBot enemyBot = new EnemyBot("image/enemy/hzR.png", x, y, this,
+                "image/enemy/hzR.png", "image/enemy/hzR.png",
+                "image/enemy/hzR.png", "image/enemy/hzL.png");
         //默认方向向下
         enemyBot.direction = AbstractGameObject.DirectionEnum.DOWN;
         enemyBotList.add(enemyBot);
@@ -248,6 +254,7 @@ public class TankPanel extends JPanel implements KeyListener {
             if(state!=5) { //未暂停状态
                 a=state;  //将原状态赋值给 临时变量a
                 state=5;  //设置为暂停
+                Music.ztPlay();
             }else {
                 state=a; //设置原状态
                 run=true; //重绘 继续游戏
@@ -294,7 +301,17 @@ public class TankPanel extends JPanel implements KeyListener {
             }
             if(enemyBotList.isEmpty() &&enemyRobotCount==10){
                 //敌方坦克消灭并生成过10个坦克
-                state=4;//状态为胜利
+                Music.nbPlay();
+                //0.5秒后设置游戏状态为 胜利
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    state=4;
+                }).start();
+                break;
 
             }
         }

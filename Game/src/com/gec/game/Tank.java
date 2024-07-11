@@ -142,7 +142,7 @@ public class Tank extends AbstractGameObject{
     //射击方法
     public void attack() {
         Point p=getHeadPoint();
-        Bullet bullet=new Bullet("image/bullet/bulletGreen.gif",p.x-10,p.y-10, direction, this.tankPanel);
+        Bullet bullet=new Bullet("image/bullet/basktball.png",p.x-10,p.y-10, direction, this.tankPanel);
         //启动线程 设置1秒攻击间隔
 //        new Thread(new AttackCD()).start();
         if(attackCooling){
